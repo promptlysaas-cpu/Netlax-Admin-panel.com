@@ -1,0 +1,79 @@
+{
+  "entities": {
+    "Movie": {
+      "title": "Movie",
+      "description": "Represents a movie in the streaming platform.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "genre": { "type": "string" },
+        "thumbnailUrl": { "type": "string", "format": "uri" },
+        "videoUrl": { "type": "string", "format": "uri" },
+        "rating": { "type": "number" },
+        "releaseYear": { "type": "number" },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["title", "genre", "videoUrl", "createdAt"]
+    },
+    "Report": {
+      "title": "Report",
+      "description": "Represents a broken link report.",
+      "type": "object",
+      "properties": {
+        "movieId": { "type": "string" },
+        "movieTitle": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "resolved"] },
+        "reportedAt": { "type": "number" }
+      },
+      "required": ["movieId", "status", "reportedAt"]
+    },
+    "Ad": {
+      "title": "Ad",
+      "description": "Represents an advertisement configuration.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "code": { "type": "string" },
+        "type": { "type": "string", "enum": ["preroll", "midroll", "popup", "banner"] },
+        "enabled": { "type": "boolean" },
+        "midrollMinute": { "type": "number" },
+        "skipTimer": { "type": "number" },
+        "movieId": { "type": "string", "description": "Optional specific movie to attach ad to" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["title", "code", "type", "enabled", "createdAt"]
+    },
+    "AdAnalytics": {
+      "title": "AdAnalytics",
+      "description": "Represents analytics for an ad.",
+      "type": "object",
+      "properties": {
+        "adId": { "type": "string" },
+        "views": { "type": "number" },
+        "clicks": { "type": "number" },
+        "date": { "type": "string", "format": "date" }
+      },
+      "required": ["adId", "views", "clicks", "date"]
+    }
+  },
+  "firestore": {
+    "movies/{movieId}": {
+      "schema": "Movie",
+      "description": "Collection of all movies."
+    },
+    "reports/{reportId}": {
+      "schema": "Report",
+      "description": "Collection of user-reported issues."
+    },
+    "ads/{adId}": {
+      "schema": "Ad",
+      "description": "Collection of ad configurations."
+    },
+    "adAnalytics/{analyticsId}": {
+      "schema": "AdAnalytics",
+      "description": "Analytics tracking views and clicks for ads."
+    }
+  }
+}

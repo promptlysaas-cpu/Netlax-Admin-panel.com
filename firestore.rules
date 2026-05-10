@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Basic Auth Check
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    match /movies/{movieId} {
+      allow read: if true; // Public can read movies
+      allow create, update, delete: if isSignedIn();
+    }
+
+    match /reports/{reportId} {
+      allow create: if true; // Any user can create a report
+      allow read, update, delete: if isSignedIn();
+    }
+    
+    match /ads/{adId} {
+      allow read: if true; // Public can retrieve ad configs
+      allow create, update, delete: if isSignedIn();
+    }
+
+    match /adAnalytics/{analyticsId} {
+      // Increments are usually done by users anonymously hitting the ads,
+      // but to simplify, we allow anyone to update (increment views/clicks)
+      allow create, update: if true; 
+      allow read, delete: if isSignedIn();
+    }
+  }
+}
